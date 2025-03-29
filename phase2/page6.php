@@ -1,13 +1,25 @@
 <?php
 session_start();
 
-// Sécurité : rediriger si l'utilisateur n'est pas connecté
+// 🔐 Redirection si non connecté
 if (!isset($_SESSION["user"])) {
   header("Location: page5.php?erreur=Veuillez vous connecter d'abord.");
   exit;
 }
 
 $user = $_SESSION["user"];
+
+// 📂 Charger les réservations
+$resFile = "data/reservations.json";
+$reservations = file_exists($resFile) ? json_decode(file_get_contents($resFile), true) : [];
+
+// 📂 Charger les voyages
+$voyageFile = "data/voyages.json";
+$voyages = file_exists($voyageFile) ? json_decode(file_get_contents($voyageFile), true) : [];
+
+// 🎯 Filtrer les réservations de l'utilisateur
+$userId = $user["id"];
+$mesReservations = array_filter($reservations, fn($r) => $r["user_id"] == $userId);
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +38,7 @@ $user = $_SESSION["user"];
 
   <main>
     <div class="flexbox">
-      <h2>Informations Personnelles</h2>
+      <h2>👤 Informations Personnelles</h2>
       <ul>
         <li><strong>Nom d'utilisateur :</strong> <?= htmlspecialchars($user['login']) ?></li>
         <li><strong>Email :</strong> <?= htmlspecialchars($user['email']) ?></li>
@@ -35,6 +47,26 @@ $user = $_SESSION["user"];
       <div class="button-container" style="margin-top: 20px;">
         <a href="traitement/logout.php" class="payment-button">Se déconnecter 🚪</a>
       </div>
+    </div>
+
+    <div class="flexbox">
+      <h2>📋 Mes Réservations</h2>
+      <?php if (empty($mesReservations)): ?>
+        <p>Aucune réservation pour le moment.</p>
+      <?php else: ?>
+        <ul>
+          <?php foreach ($mesReservations as $res): 
+            $voyage = current(array_filter($voyages, fn($v) => $v["id"] == $res["voyage_id"]));
+          ?>
+            <li>
+              <strong><?= htmlspecialchars($voyage["titre"] ?? "Voyage inconnu") ?></strong><br>
+              Réservé le : <?= date("d/m/Y à H:i", strtotime($res["date"])) ?>
+              <br>
+              <a href="voyage_detaille.php?id=<?= $voyage["id"] ?>" class="payment-button">Voir ce voyage</a>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+      <?php endif; ?>
     </div>
   </main>
 
@@ -46,3 +78,4 @@ $user = $_SESSION["user"];
 
 </body>
 </html>
+
