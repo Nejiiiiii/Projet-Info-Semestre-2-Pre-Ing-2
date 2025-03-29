@@ -1,13 +1,14 @@
 <?php
 session_start();
 
+// 🔐 Vérification des droits d'accès
 if (!isset($_SESSION["user"]) || $_SESSION["user"]["role"] !== "admin") {
     die("Accès refusé.");
 }
 
 $dataFile = "../data/utilisateurs.json";
 
-// Vérifie que les données ont été envoyées
+// 📥 Traitement du formulaire
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = $_POST["action"] ?? "";
     $userId = intval($_POST["user_id"] ?? 0);
@@ -19,15 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $users = json_decode(file_get_contents($dataFile), true);
     $found = false;
 
-    foreach ($users as &$user) {
+    foreach ($users as $index => $user) {
         if ($user["id"] === $userId) {
             $found = true;
 
             if ($action === "vip") {
-                $user["role"] = "vip";
+                $users[$index]["role"] = "vip";
             } elseif ($action === "ban") {
-                // Supprimer l'utilisateur
-                $users = array_filter($users, fn($u) => $u["id"] !== $userId);
+                unset($users[$index]);
             }
 
             break;
@@ -35,7 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if ($found) {
-        file_put_contents($dataFile, json_encode(array_values($users), JSON_PRETTY_PRINT));
+        // Réindexation (très important si on supprime)
+        $users = array_values($users);
+        file_put_contents($dataFile, json_encode($users, JSON_PRETTY_PRINT));
         header("Location: ../page7.php?success=1");
         exit;
     } else {
