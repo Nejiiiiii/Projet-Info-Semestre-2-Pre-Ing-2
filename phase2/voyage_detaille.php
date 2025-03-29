@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // Sécurité : on vérifie l'ID du voyage
 if (!isset($_GET['id'])) {
   header("Location: liste_voyage.php");
@@ -8,7 +10,6 @@ if (!isset($_GET['id'])) {
 $id = intval($_GET['id']);
 $dataFile = "data/voyages.json";
 
-// Vérifie que le fichier existe
 if (!file_exists($dataFile)) {
   die("Fichier des voyages introuvable.");
 }
@@ -78,7 +79,14 @@ if (!$voyage) {
       <?php endif; ?>
 
       <div class="button-container">
-        <a href="#" class="payment-button">Réserver ce voyage</a> <!-- À relier plus tard -->
+        <?php if (isset($_SESSION["user"])): ?>
+          <form action="traitement/reserver.php" method="post">
+            <input type="hidden" name="voyage_id" value="<?= $voyage['id'] ?>">
+            <button type="submit" class="payment-button">📩 Réserver ce voyage</button>
+          </form>
+        <?php else: ?>
+          <p><a href="page5.php" class="payment-button">Connectez-vous pour réserver</a></p>
+        <?php endif; ?>
       </div>
     </div>
   </main>
