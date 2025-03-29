@@ -1,33 +1,59 @@
 <?php
+session_start();
+
+// 🔐 Sécurité admin
+if (!isset($_SESSION["user"]) || $_SESSION["user"]["role"] !== "admin") {
+  header("Location: page5.php?erreur=Accès refusé.");
+  exit;
+}
+
 include 'voyages.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = uniqid(); // Génère un ID unique
+    $id = uniqid();
     $nom = $_POST['nom'];
     $description = $_POST['description'];
-    $prix = $_POST['prix'];
-    
+    $prix = floatval($_POST['prix']);
+
     ajouterVoyage($id, $nom, $description, $prix);
-    header("Location: liste_voyages.php");
-    exit();
+    header("Location: liste_voyages.php?success=1");
+    exit;
 }
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Ajouter un Voyage</title>
+  <meta charset="UTF-8">
+  <title>Ajouter un Voyage</title>
+  <link rel="stylesheet" href="css/code.css">
 </head>
 <body>
-    <h1>Ajouter un Voyage</h1>
-    <form method="post">
-        <label>Nom :</label>
-        <input type="text" name="nom" required><br>
-        <label>Description :</label>
-        <textarea name="description" required></textarea><br>
-        <label>Prix (€) :</label>
-        <input type="number" name="prix" required><br>
-        <button type="submit">Ajouter</button>
-    </form>
-    <a href="liste_voyages.php">Retour à la liste</a>
+
+  <header>
+    <h1>📝 Ajouter un nouveau voyage</h1>
+    <button onclick="window.location.href='liste_voyages.php'" class="home-button">↩️ Retour à la liste</button>
+  </header>
+
+  <main>
+    <div class="flexbox">
+      <form method="post">
+        <input type="text" name="nom" placeholder="Nom du voyage" required><br>
+        <textarea name="description" placeholder="Description" rows="4" required></textarea><br>
+        <input type="number" name="prix" placeholder="Prix (€)" required><br>
+
+        <div class="button-container">
+          <button type="submit" class="payment-button">➕ Ajouter</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 High WAY. Tous droits réservés.  
+    📍 Paris, France | 📧 contact@HighWAY.fr</p>
+  </footer>
+
 </body>
 </html>
+
