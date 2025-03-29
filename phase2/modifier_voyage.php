@@ -1,19 +1,27 @@
 <?php
 session_start();
+
+// 🔐 Sécurité admin
 if (!isset($_SESSION["user"]) || $_SESSION["user"]["role"] !== "admin") {
   die("Accès interdit.");
 }
 
-$id = $_GET["id"] ?? null;
+// 📥 ID du voyage
+$id = intval($_GET["id"] ?? 0);
 if (!$id) {
   header("Location: liste_voyage.php");
   exit;
 }
 
+// 📄 Charger les données
 $dataFile = "data/voyages.json";
-$voyages = json_decode(file_get_contents($dataFile), true);
+if (!file_exists($dataFile)) {
+  die("Fichier voyages introuvable.");
+}
 
+$voyages = json_decode(file_get_contents($dataFile), true);
 $voyage = null;
+
 foreach ($voyages as $v) {
   if ($v["id"] == $id) {
     $voyage = $v;
@@ -50,7 +58,7 @@ if (!$voyage) {
         <input type="date" name="date_depart" value="<?= $voyage["date_depart"] ?>" required><br>
         <input type="date" name="date_retour" value="<?= $voyage["date_retour"] ?>" required><br>
         <input type="number" name="prix" value="<?= $voyage["prix"] ?>" required><br>
-        <textarea name="description" rows="4"><?= htmlspecialchars($voyage["description"]) ?></textarea><br>
+        <textarea name="description" rows="4" required><?= htmlspecialchars($voyage["description"]) ?></textarea><br>
         <input type="text" name="options" value="<?= implode(', ', $voyage["options"] ?? []) ?>"><br>
         <input type="text" name="image" value="<?= htmlspecialchars($voyage["image"]) ?>"><br>
 
