@@ -84,10 +84,36 @@ $avis = array_filter($commentaires, fn($c) => $c["voyage_id"] == $voyage["id"]);
 
       <div class="button-container">
         <?php if (isset($_SESSION["user"])): ?>
-          <form action="traitement/reserver.php" method="post">
-            <input type="hidden" name="voyage_id" value="<?= $voyage['id'] ?>">
-            <button type="submit" class="payment-button">📩 Réserver ce voyage</button>
-          </form>
+  <form action="recapitulatif.php" method="post">
+  <input type="hidden" name="voyage_id" value="<?= $voyage["id"] ?>">
+
+  <label>Nombre de personnes :</label>
+  <input type="number" name="nb_personnes" min="1" value="1" required><br><br>
+
+  <label>Hébergement :</label>
+  <select name="hebergement">
+    <option value="standard">Standard</option>
+    <option value="confort">Confort</option>
+    <option value="luxe">Luxe</option>
+  </select><br><br>
+
+  <label>Activités :</label><br>
+  <input type="checkbox" name="activites[]" value="Randonnée"> Randonnée<br>
+  <input type="checkbox" name="activites[]" value="Plongée"> Plongée<br>
+  <input type="checkbox" name="activites[]" value="Visites culturelles"> Visites culturelles<br><br>
+
+  <label>Transport :</label>
+  <select name="transport">
+    <option value="bus">Bus</option>
+    <option value="train">Train</option>
+    <option value="avion">Avion</option>
+  </select><br><br>
+
+  <div class="button-container">
+    <button type="submit" class="payment-button">🔍 Voir mon récapitulatif</button>
+  </div>
+</form>
+
         <?php else: ?>
           <p><a href="page5.php" class="payment-button">Connectez-vous pour réserver</a></p>
         <?php endif; ?>
