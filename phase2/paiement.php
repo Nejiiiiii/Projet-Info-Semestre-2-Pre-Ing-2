@@ -32,42 +32,41 @@ if (!$reservation) {
     exit();
 }
 
+$voyage_id = $reservation['voyage_id'];
+
+// Récupère les détails du voyage
+$voyage_stmt = $conn->prepare("SELECT * FROM voyages WHERE id = :voyage_id");
+$voyage_stmt->bindParam(':voyage_id', $voyage_id);
+$voyage_stmt->execute();
+$voyage = $voyage_stmt->fetch(PDO::FETCH_ASSOC);
+
 $montant = $reservation['montant']; // Montant à payer
-
-// Processus de paiement (remplace par l'intégration d'un service de paiement réel)
-$payment_successful = processPayment($montant);
-
-if ($payment_successful) {
-    // Met à jour le statut de la réservation en "payée"
-    $update_stmt = $conn->prepare("UPDATE reservations SET statut = 'payée' WHERE id = :reservation_id");
-    $update_stmt->bindParam(':reservation_id', $reservation_id);
-    $update_stmt->execute();
-
-    // Enregistre l'information du paiement
-    $payment_stmt = $conn->prepare("INSERT INTO paiements (reservation_id, montant, date_paiement, statut) 
-                                   VALUES (:reservation_id, :montant, NOW(), 'réussi')");
-    $payment_stmt->bindParam(':reservation_id', $reservation_id);
-    $payment_stmt->bindParam(':montant', $montant);
-    $payment_stmt->execute();
-
-    echo "Paiement réussi. Votre réservation est confirmée.";
-} else {
-    // En cas d'échec du paiement
-    $payment_stmt = $conn->prepare("INSERT INTO paiements (reservation_id, montant, date_paiement, statut) 
-                                   VALUES (:reservation_id, :montant, NOW(), 'échoué')");
-    $payment_stmt->bindParam(':reservation_id', $reservation_id);
-    $payment_stmt->bindParam(':montant', $montant);
-    $payment_stmt->execute();
-
-    echo "Le paiement a échoué. Veuillez réessayer.";
-}
-
-// Fonction simulant le processus de paiement
-function processPayment($amount) {
-    // Remplace cette fonction par un appel à une API de paiement réel
-    // Exemple : Stripe, PayPal, etc.
-
-    // Ici, on simule toujours un paiement réussi pour la démonstration
-    return true;
-}
 ?>
+
+<!-- Affichage du récapitulatif du voyage -->
+<h2>Récapitulatif de votre voyage</h2>
+<p><strong>Nom du voyage : </strong><?php echo $voyage['nom']; ?></p>
+<p><strong>Dates : </strong><?php echo $voyage['date_debut']; ?> - <?php echo $voyage['date_fin']; ?></p>
+<p><strong>Montant à payer : </strong><?php echo $montant; ?> €</p>
+
+<!-- Formulaire de paiement -->
+<h3>Entrez vos coordonnées bancaires :</h3>
+<form action="verifier_paiement.php" method="post">
+    <label for="numero_carte">Numéro de carte (16 chiffres) :</label>
+    <input type="text" id="numero_carte" name="numero_carte" required pattern="\d{16}" maxlength="16"><br><br>
+
+    <label for="nom_proprietaire">Nom du propriétaire :</label>
+    <input type="text" id="nom_proprietaire" name="nom_proprietaire" required><br><br>
+
+    <label for="expiration">Expiration (MM/AAAA) :</label>
+    <input type="text" id="expiration" name="expiration" required pattern="\d{2}/\d{4}"><br><br>
+
+    <label for="cvv">Valeur de contrôle (CVV - 3 chiffres) :</label>
+    <input type="text" id="cvv" name="cvv" required pattern="\d{3}" maxlength="3"><br><br>
+
+    <input type="hidden" name="reservation_id" value="<?php echo $reservation_id; ?>">
+    <input type="hidden" name="montant" value="<?php echo $montant; ?>">
+
+    <input type="submit" value="Payer">
+</form>
+
