@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Sécurité : on vérifie l'ID du voyage
+// Vérifie que l'ID est fourni
 if (!isset($_GET['id'])) {
   header("Location: liste_voyage.php");
   exit;
@@ -27,8 +27,12 @@ foreach ($voyages as $v) {
 if (!$voyage) {
   die("Voyage non trouvé.");
 }
-?>
 
+// Charger les commentaires
+$commentsFile = "data/commentaires.json";
+$commentaires = file_exists($commentsFile) ? json_decode(file_get_contents($commentsFile), true) : [];
+$avis = array_filter($commentaires, fn($c) => $c["voyage_id"] == $voyage["id"]);
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -89,6 +93,37 @@ if (!$voyage) {
         <?php endif; ?>
       </div>
     </div>
+
+    <?php if (isset($_SESSION["user"])): ?>
+      <div class="flexbox">
+        <h2>💬 Laisser un commentaire</h2>
+        <form action="traitement/commentaire.php" method="post">
+          <input type="hidden" name="voyage_id" value="<?= $voyage["id"] ?>">
+          <textarea name="message" rows="4" placeholder="Votre commentaire..." required></textarea><br>
+          <div class="button-container">
+            <button type="submit" class="payment-button">Envoyer ✉️</button>
+          </div>
+        </form>
+      </div>
+    <?php endif; ?>
+
+    <div class="flexbox">
+      <h2>🗨️ Avis des utilisateurs</h2>
+      <?php if (empty($avis)): ?>
+        <p>Aucun avis pour ce voyage.</p>
+      <?php else: ?>
+        <?php foreach ($avis as $c): ?>
+          <div class="review-item">
+            <div>
+              <strong><?= htmlspecialchars($c["user"]) ?></strong>
+              <small style="display:block; color: #ccc;">🕒 <?= date("d/m/Y H:i", strtotime($c["date"])) ?></small>
+              <p><?= nl2br(htmlspecialchars($c["message"])) ?></p>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </div>
+
   </main>
 
   <footer>
