@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "titre": "Évasion à Tokyo",
+    "destination": "Tokyo",
+    "date_depart": "2025-07-10",
+    "date_retour": "2025-07-20",
+    "prix": 1299,
+    "description": "Plongez dans l'effervescence japonaise entre traditions et technologie.",
+    "options": ["Hébergement 3⭐", "Visite du temple Senso-ji", "Guide local"],
+    "image": "tokyo.jpg"
+  },
+  {
+    "id": 2,
+    "titre": "Séjour à New York",
+    "destination": "New York",
+    "date_depart": "2025-08-01",
+    "date_retour": "2025-08-08",
+    "prix": 1599,
+    "description": "Découvrez la ville qui ne dort jamais et ses gratte-ciel impressionnants.",
+    "options": ["Hotel Manhattan", "Tour en hélicoptère", "Comédie musicale à Broadway"],
+    "image": "newyork.jpg"
+  },
+  {
+    "id": 3,
+    "titre": "Aventure au Maroc",
+    "destination": "Marrakech",
+    "date_depart": "2025-09-15",
+    "date_retour": "2025-09-25",
+    "prix": 899,
+    "description": "Explorez les souks, le désert et la culture marocaine authentique.",
+    "options": ["Excursion au Sahara", "Nuit en bivouac", "Cuisine locale"],
+    "image": "maroc.jpg"
+  }
+]
