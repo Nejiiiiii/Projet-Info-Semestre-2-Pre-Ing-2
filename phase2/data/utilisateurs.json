@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "login": "admin1",
+    "email": "admin1@highway.com",
+    "password": "$2y$10$syDBeQ5/CYw4zHtGOheKreMZ/HzPYZ7LZYy4KyV27Xu55dAnA3g.q",
+    "role": "admin"
+  },
+  {
+    "id": 2,
+    "login": "admin2",
+    "email": "admin2@highway.com",
+    "password": "$2y$10$ghe8UoAq0D0MWbMF8cuQH.nEUmwrf6Sh6dN9Rv74jEZm17Iuh4FRe",
+    "role": "admin"
+  },
+  {
+    "id": 3,
+    "login": "user1",
+    "email": "user1@mail.com",
+    "password": "$2y$10$ltzfa43nVn5gGJDgPf6g3ukXzW4xGKiZ2AyA1d7B2EtTQ/U0cA3NK",
+    "role": "user"
+  },
+  {
+    "id": 4,
+    "login": "user2",
+    "email": "user2@mail.com",
+    "password": "$2y$10$6GHZK97UP3m6Z6leBh9loOkl2y8XL9UWa8NADwUdcZ4BxYeQmABqG",
+    "role": "user"
+  },
+  {
+    "id": 5,
+    "login": "user3",
+    "email": "user3@mail.com",
+    "password": "$2y$10$Q7Nij2UdAiLz0E.9boqQ8OEkLDdzUoS2f0b6V4JJuHicrxKRhhGcy",
+    "role": "user"
+  }
+]
