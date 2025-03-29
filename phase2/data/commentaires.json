@@ -1,0 +1,14 @@
+[
+  {
+    "voyage_id": 1,
+    "user": "amine",
+    "date": "2025-03-29 17:08:52",
+    "message": "Super voyage ! Très bien organisé 👍"
+  },
+  {
+    "voyage_id": 2,
+    "user": "salma",
+    "date": "2025-03-29 17:10:02",
+    "message": "Un peu déçue par la restauration."
+  }
+]
