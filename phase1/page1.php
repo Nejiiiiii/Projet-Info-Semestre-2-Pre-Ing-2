@@ -8,12 +8,12 @@
 <body>
     <nav>
     <ul>
-      <li><a href="page2.html">Présentation du site</a></li>
-      <li><a href="page3.html">Recherche de voyage</a></li>
-      <li><a href="page4.html">Inscription</a></li>
-      <li><a href="page5.html">Connexion</a></li>
-      <li><a href="page6.html">Profil</a></li>
-      <li><a href="page7.html">Administration</a></li>
+      <li><a href="page2.php">Présentation du site</a></li>
+      <li><a href="page3.php">Recherche de voyage</a></li>
+      <li><a href="page4.php">Inscription</a></li>
+      <li><a href="page5.php">Connexion</a></li>
+      <li><a href="page6.php">Profil</a></li>
+      <li><a href="page7.php">Administration</a></li>
     </ul>
   </nav>
     <header>
