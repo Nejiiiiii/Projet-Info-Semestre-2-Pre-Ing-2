@@ -33,6 +33,11 @@ if (file_exists($dataFile)) {
     <div class="flexbox">
       <h2>Liste des Utilisateurs</h2>
 
+      <!-- ✅ Message de succès -->
+      <?php if (isset($_GET["success"])): ?>
+        <p style="color: green; text-align: center;">✅ Action effectuée avec succès.</p>
+      <?php endif; ?>
+
       <?php foreach ($users as $user): ?>
         <ul>
           <li><strong><?= htmlspecialchars($user["login"]) ?></strong></li>
@@ -57,7 +62,6 @@ if (file_exists($dataFile)) {
           </li>
         </ul>
       <?php endforeach; ?>
-
     </div>
   </main>
 
