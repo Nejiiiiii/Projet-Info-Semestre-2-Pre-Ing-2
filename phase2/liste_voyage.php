@@ -1,6 +1,7 @@
 <?php
-$dataFile = "data/voyages.json";
+session_start();
 
+$dataFile = "data/voyages.json";
 $voyages = [];
 
 if (file_exists($dataFile)) {
@@ -37,6 +38,15 @@ if (file_exists($dataFile)) {
 
           <li class="button-container">
             <a href="voyage_detaille.php?id=<?= $voyage['id'] ?>" class="payment-button">Voir les détails</a>
+
+            <?php if (isset($_SESSION["user"]) && $_SESSION["user"]["role"] === "admin"): ?>
+              <a href="modifier_voyage.php?id=<?= $voyage['id'] ?>" class="payment-button">✏️ Modifier</a>
+
+              <form action="traitement/supprimer_voyage.php" method="post" style="display:inline;">
+                <input type="hidden" name="id" value="<?= $voyage['id'] ?>">
+                <button type="submit" onclick="return confirm('Supprimer ce voyage ?');" class="payment-button">🗑️ Supprimer</button>
+              </form>
+            <?php endif; ?>
           </li>
         </ul>
       <?php endforeach; ?>
@@ -49,5 +59,5 @@ if (file_exists($dataFile)) {
     | Conçu avec 💖 pour pailleter vos vols ✈️</p>
   </footer>
 
-</body>
-</html>
+</body
+
