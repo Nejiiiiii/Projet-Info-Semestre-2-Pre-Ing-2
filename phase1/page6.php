@@ -1,72 +1,65 @@
+<?php
+session_start();
+
+// Redirection si non connecté
+if (!isset($_SESSION['login'])) {
+    header("Location: page5.php?erreur=connexion_requise");
+    exit;
+}
+
+// Chargement des données utilisateur
+$utilisateur = null;
+$login = $_SESSION['login'];
+$fichier = "utilisateurs.json";
+
+if (file_exists($fichier)) {
+    $utilisateurs = json_decode(file_get_contents($fichier), true);
+    foreach ($utilisateurs as $u) {
+        if ($u['login'] === $login) {
+            $utilisateur = $u;
+            break;
+        }
+    }
+}
+
+// Redirection de sécurité si l'utilisateur n'existe pas
+if (!$utilisateur) {
+    session_destroy();
+    header("Location: page5.php?erreur=utilisateur_introuvable");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Utilisateur</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Utilisateur</title>
+  <link rel="stylesheet" href="FreeTour.css">
 </head>
 <body>
-    <header>
-        <h1>Mon Profil</h1>
-        <button class="home-button">
-            <button onclick="window.location.href='page1.html'" class="home-button">Retour à l'accueil ↩️</button>
-        </button>
-    </header>
+  <header>
+    <h1>Mon Profil</h1>
+    <button onclick="window.location.href='page1.php'" class="home-button">Retour à l'accueil ↩️</button>
+  </header>
 
-    <main>
-        <div class="flexbox">
-            <h2>Informations Personnelles</h2>
-            <ul>
-                <li><strong>Nom :</strong> <span id="user-name">Dupont</span> <button onclick="editField('user-name')">Modifier</button></li>
-                <li><strong>Email :</strong> <span id="user-email">dupont@example.com</span> <button onclick="editField('user-email')">Modifier</button></li>
-                <li><strong>Téléphone :</strong> <span id="user-phone">+33 6 12 34 56 78</span> <button onclick="editField('user-phone')">Modifier</button></li>
-                <li><strong>Adresse :</strong> <span id="user-address">123 rue des Exemples, Paris</span> <button onclick="editField('user-address')">Modifier</button></li>
-                <li>
-                    <strong>Mot de passe :</strong> 
-                    <span id="user-password" data-password="dupont123">********</span> 
-                    <button onclick="editPassword()">Modifier</button> 
-                    <button onclick="togglePasswordVisibility()">Voir mot de passe</button>
-                </li>
-            </ul>
-        </div>
-    </main>
+  <main>
+    <div class="flexbox">
+      <h2>Informations Personnelles</h2>
+      <ul>
+        <li><strong>Nom :</strong> <span id="user-name"><?= htmlspecialchars($utilisateur['nom']) ?></span></li>
+        <li><strong>Pseudo :</strong> <span><?= htmlspecialchars($utilisateur['pseudo']) ?></span></li>
+        <li><strong>Date de naissance :</strong> <span><?= htmlspecialchars($utilisateur['naissance']) ?></span></li>
+        <li><strong>Adresse :</strong> <span id="user-address"><?= htmlspecialchars($utilisateur['adresse']) ?></span></li>
+        <li><strong>Login :</strong> <span><?= htmlspecialchars($utilisateur['login']) ?></span></li>
+        <li><strong>Date d’inscription :</strong> <span><?= htmlspecialchars($utilisateur['date_inscription']) ?></span></li>
+      </ul>
+    </div>
+  </main>
 
-    <footer>
-        <p>© 2025 High WAY. Tous droits réservés.
-    
-        📍 Paris, France | 📞 +33 1 23 45 67 89 | 📧 contact@HighWAY.fr
-        
-        | Conçu avec 💖 pour pailleter vos vols.✈️</p>
-    </footer>
-
-    <script>
-        function editField(fieldId) {
-            const field = document.getElementById(fieldId);
-            const newValue = prompt("Modifier :", field.textContent);
-            if (newValue !== null && newValue.trim() !== "") {
-                field.textContent = newValue;
-            }
-        }
-
-        function editPassword() {
-            const newPassword = prompt("Entrez votre nouveau mot de passe :");
-            if (newPassword !== null && newPassword.trim() !== "") {
-                alert("Mot de passe mis à jour avec succès !");
-                document.getElementById('user-password').textContent = '********';
-                document.getElementById('user-password').setAttribute('data-password', newPassword);
-            }
-        }
-
-        function togglePasswordVisibility() {
-            const passwordField = document.getElementById('user-password');
-            const currentPassword = passwordField.getAttribute('data-password');
-            if (passwordField.textContent === '********') {
-                passwordField.textContent = currentPassword; // Afficher le mot de passe
-            } else {
-                passwordField.textContent = '********'; // Masquer le mot de passe
-            }
-        }
-    </script>
+  <footer>
+    <p>© 2025 High WAY. Tous droits réservés. 📍 Paris, France | 📞 +33 1 23 45 67 89 | 📧 contact@HighWAY.fr |
+    Conçu avec 💖 pour pailleter vos vols.✈️</p>
+  </footer>
 </body>
 </html>
