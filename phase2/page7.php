@@ -48,18 +48,18 @@ if (file_exists($dataFile)) {
           <li>
             <div class="button-container">
               <!-- Formulaire pour passer en VIP -->
-              <form action="traitement/admin_action.php" method="post" style="display:inline;">
-                <input type="hidden" name="user_id" value="<?= $user["id"] ?>">
-                <input type="hidden" name="action" value="vip">
-                <button type="submit" class="payment-button">Passer en VIP</button>
+             <form class="admin-action" data-action="vip" style="display:inline;">
+                 <input type="hidden" name="user_id" value="<?= $user["id"] ?>">
+                  <button type="submit" class="payment-button">Passer en VIP</button>
               </form>
 
+
               <!-- Formulaire pour bannir -->
-              <form action="traitement/admin_action.php" method="post" style="display:inline;">
-                <input type="hidden" name="user_id" value="<?= $user["id"] ?>">
-                <input type="hidden" name="action" value="ban">
-                <button type="submit" class="payment-button">Bannir</button>
-              </form>
+              <form class="admin-action" data-action="ban" style="display:inline;">
+                  <input type="hidden" name="user_id" value="<?= $user["id"] ?>">
+                  <button type="submit" class="payment-button">Bannir</button>
+               </form>
+
             </div>
           </li>
         </ul>
