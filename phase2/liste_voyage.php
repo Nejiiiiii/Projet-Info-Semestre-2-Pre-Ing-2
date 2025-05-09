@@ -89,6 +89,7 @@ if ($tri === "asc") {
   <?php
     $duree = (new DateTime($voyage["date_depart"]))->diff(new DateTime($voyage["date_retour"]))->days;
   ?>
+    
   <div class="voyage-item"
        data-prix="<?= $voyage["prix"] ?>"
        data-date="<?= $voyage["date_depart"] ?>"
