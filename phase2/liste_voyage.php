@@ -76,29 +76,37 @@ if ($tri === "asc") {
         <p>Aucun voyage trouvé selon vos critères.</p>
       <?php else: ?>
         <?php foreach ($voyages as $voyage): ?>
-          <ul>
-            <li><strong><?= htmlspecialchars($voyage["titre"]) ?></strong></li>
-            <li>Destination : <?= htmlspecialchars($voyage["destination"]) ?></li>
-            <li>Départ : <?= htmlspecialchars($voyage["date_depart"]) ?></li>
-            <li>Retour : <?= htmlspecialchars($voyage["date_retour"]) ?></li>
-            <li>Prix : <?= htmlspecialchars($voyage["prix"]) ?> €</li>
+  <?php
+    $duree = (new DateTime($voyage["date_depart"]))->diff(new DateTime($voyage["date_retour"]))->days;
+  ?>
+  <div class="voyage-item"
+       data-prix="<?= $voyage["prix"] ?>"
+       data-date="<?= $voyage["date_depart"] ?>"
+       data-duree="<?= $duree ?>">
+       
+    <ul>
+      <li><strong><?= htmlspecialchars($voyage["titre"]) ?></strong></li>
+      <li>Destination : <?= htmlspecialchars($voyage["destination"]) ?></li>
+      <li>Départ : <?= htmlspecialchars($voyage["date_depart"]) ?></li>
+      <li>Retour : <?= htmlspecialchars($voyage["date_retour"]) ?></li>
+      <li>Prix : <?= htmlspecialchars($voyage["prix"]) ?> €</li>
 
-            <li class="button-container">
-              <a href="voyage_detaille.php?id=<?= $voyage['id'] ?>" class="payment-button">Voir les détails</a>
+      <li class="button-container">
+        <a href="voyage_detaille.php?id=<?= $voyage['id'] ?>" class="payment-button">Voir les détails</a>
 
-              <?php if (isset($_SESSION["user"]) && $_SESSION["user"]["role"] === "admin"): ?>
-                <a href="modifier_voyage.php?id=<?= $voyage['id'] ?>" class="payment-button">✏️ Modifier</a>
+        <?php if (isset($_SESSION["user"]) && $_SESSION["user"]["role"] === "admin"): ?>
+          <a href="modifier_voyage.php?id=<?= $voyage['id'] ?>" class="payment-button">✏️ Modifier</a>
 
-                <form action="traitement/supprimer_voyage.php" method="post" style="display:inline;">
-                  <input type="hidden" name="id" value="<?= $voyage['id'] ?>">
-                  <button type="submit" onclick="return confirm('Supprimer ce voyage ?');" class="payment-button">🗑️ Supprimer</button>
-                </form>
-              <?php endif; ?>
-            </li>
-          </ul>
-        <?php endforeach; ?>
-      <?php endif; ?>
-    </div>
+          <form action="traitement/supprimer_voyage.php" method="post" style="display:inline;">
+            <input type="hidden" name="id" value="<?= $voyage['id'] ?>">
+            <button type="submit" onclick="return confirm('Supprimer ce voyage ?');" class="payment-button">🗑️ Supprimer</button>
+          </form>
+        <?php endif; ?>
+      </li>
+    </ul>
+  </div>
+<?php endforeach; ?>
+
   </main>
 
   <footer>
