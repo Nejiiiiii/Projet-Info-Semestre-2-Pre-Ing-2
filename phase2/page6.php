@@ -40,11 +40,26 @@ $mesReservations = array_filter($reservations, fn($r) => $r["user_id"] == $userI
   <main>
     <div class="flexbox">
       <h2>👤 Informations Personnelles</h2>
-      <ul>
-        <li><strong>Nom d'utilisateur :</strong> <?= htmlspecialchars($user['login']) ?></li>
-        <li><strong>Email :</strong> <?= htmlspecialchars($user['email']) ?></li>
-        <li><strong>Rôle :</strong> <?= htmlspecialchars($user['role']) ?></li>
-      </ul>
+ <ul>
+  <li>
+    <strong>Nom d'utilisateur :</strong>
+    <span id="user-login"><?= htmlspecialchars($user['login']) ?></span>
+    <button onclick="editField('login')">✏️</button>
+  </li>
+
+  <li>
+    <strong>Email :</strong>
+    <span id="user-email"><?= htmlspecialchars($user['email']) ?></span>
+    <button onclick="editField('email')">✏️</button>
+  </li>
+
+  <li>
+    <strong>Rôle :</strong>
+    <span id="user-role"><?= htmlspecialchars($user['role']) ?></span>
+    <!-- pas modifiable, donc pas de bouton -->
+  </li>
+</ul>
+
       <div class="button-container" style="margin-top: 20px;">
         <a href="traitement/logout.php" class="payment-button">Se déconnecter 🚪</a>
       </div>
