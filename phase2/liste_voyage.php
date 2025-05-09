@@ -43,6 +43,8 @@ if ($tri === "asc") {
   <meta charset="UTF-8">
   <title>Liste des voyages - High WAY</title>
   <link rel="stylesheet" href="css/code.css">
+  <script src="js/recherche.js" defer></script>
+
 </head>
 <body>
 
