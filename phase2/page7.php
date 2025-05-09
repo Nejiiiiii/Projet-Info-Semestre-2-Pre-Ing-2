@@ -21,6 +21,8 @@ if (file_exists($dataFile)) {
   <meta charset="UTF-8">
   <title>Administration - Utilisateurs</title>
   <link rel="stylesheet" href="css/code.css">
+  <script src="js/admin.js" defer></script>
+
 </head>
 <body>
 
