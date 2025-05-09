@@ -75,6 +75,16 @@ if ($tri === "asc") {
       <?php if (empty($voyages)): ?>
         <p>Aucun voyage trouvé selon vos critères.</p>
       <?php else: ?>
+       <div style="text-align:center; margin: 20px;">
+        <label for="tri">🔽 Trier les voyages par :</label>
+         <select id="tri">
+        <option value="default">-- Aucun --</option>
+         <option value="prix">Prix</option>
+         <option value="date">Date de départ</option>
+       <option value="duree">Durée</option>
+       </select>
+      </div>
+
         <?php foreach ($voyages as $voyage): ?>
   <?php
     $duree = (new DateTime($voyage["date_depart"]))->diff(new DateTime($voyage["date_retour"]))->days;
