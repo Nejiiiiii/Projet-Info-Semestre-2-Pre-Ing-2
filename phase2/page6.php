@@ -62,8 +62,9 @@ $mesReservations = array_filter($reservations, fn($r) => $r["user_id"] == $userI
 
       <div class="button-container" style="margin-top: 20px;">
         <a href="traitement/logout.php" class="payment-button">Se déconnecter 🚪</a>
+        <div id="save-profile-placeholder"></div>
       </div>
-    </div>
+     
 
     <div class="flexbox">
       <h2>📋 Mes Réservations</h2>
