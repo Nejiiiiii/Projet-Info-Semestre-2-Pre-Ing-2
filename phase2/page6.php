@@ -25,6 +25,7 @@ $mesReservations = array_filter($reservations, fn($r) => $r["user_id"] == $userI
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <script src="js/profil.js" defer></script>
   <meta charset="UTF-8">
   <title>Profil - High WAY</title>
   <link rel="stylesheet" href="css/code.css">
