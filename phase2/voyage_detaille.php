@@ -62,7 +62,8 @@ $avis = array_filter($commentaires, fn($c) => $c["voyage_id"] == $voyage["id"]);
             echo $d1->diff($d2)->format('%a jours');
           ?>
         </li>
-        <li><strong>Prix :</strong> <?= htmlspecialchars($voyage["prix"]) ?> €</li>
+        <li><strong>Prix :</strong> <span id="prix_total" data-prix="<?= $voyage["prix"] ?>"><?= htmlspecialchars($voyage["prix"]) ?> €</span></li> // Ligne remplacé, avant c'était <li><strong>Prix :</strong> <?= htmlspecialchars($voyage["prix"]) ?> €</li>
+ 
         <li><strong>Description :</strong><br> <?= nl2br(htmlspecialchars($voyage["description"])) ?></li>
 
         <?php if (isset($voyage["options"])): ?>
