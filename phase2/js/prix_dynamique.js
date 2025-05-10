@@ -1,37 +1,30 @@
-document.addEventListener("DOMContentLoaded", function () {
-    let prixBase = parseFloat(document.getElementById("prix_total").dataset.prix); // Récupération du prix initial
+fetch("data/tarifs.json")
+    .then(response => response.json())
+    .then(tarifs => {
+        function calculerPrix() {
+            let nbPersonnes = parseInt(document.querySelector("input[name='nb_personnes']").value) || 1;
+            let hebergement = document.querySelector("select[name='hebergement']").value;
+            let transport = document.querySelector("select[name='transport']").value;
+            let activites = document.querySelectorAll("input[name='activites[]']:checked");
 
-    // Tarifs des options
-    const tarifs = {
-        hebergement: { standard: 0, confort: 50, luxe: 100 },
-        transport: { bus: 0, train: 30, avion: 100 },
-        activites: { "Randonnée": 20, "Plongée": 50, "Visites culturelles": 30 }
-    };
+            let prixTotal = parseFloat(document.getElementById("prix_total").dataset.prix);
+            prixTotal += tarifs.hebergement[hebergement];
+            prixTotal += tarifs.transport[transport];
+            activites.forEach(a => prixTotal += tarifs.activites[a.value]);
 
-    function calculerPrix() {
-        let nbPersonnes = parseInt(document.querySelector("input[name='nb_personnes']").value) || 1;
-        let hebergement = document.querySelector("select[name='hebergement']").value;
-        let transport = document.querySelector("select[name='transport']").value;
-        let activites = document.querySelectorAll("input[name='activites[]']:checked");
+            // Multiplication par le nombre de personnes
+            prixTotal *= nbPersonnes;
 
-        let prixTotal = prixBase;
-        prixTotal += tarifs.hebergement[hebergement];
-        prixTotal += tarifs.transport[transport];
-        activites.forEach(a => prixTotal += tarifs.activites[a.value]);
+            // Mise à jour du prix affiché
+            document.getElementById("prix_total").innerText = prixTotal + " €";
+        }
 
-        // Multiplication par le nombre de personnes
-        prixTotal *= nbPersonnes;
+        // Écoute des modifications
+        document.querySelector("input[name='nb_personnes']").addEventListener("input", calculerPrix);
+        document.querySelector("select[name='hebergement']").addEventListener("change", calculerPrix);
+        document.querySelector("select[name='transport']").addEventListener("change", calculerPrix);
+        document.querySelectorAll("input[name='activites[]']").forEach(el => el.addEventListener("change", calculerPrix));
 
-        // Mise à jour du prix affiché
-        document.getElementById("prix_total").innerText = prixTotal + " €";
-    }
-
-    // Événements sur les inputs
-    document.querySelector("input[name='nb_personnes']").addEventListener("input", calculerPrix);
-    document.querySelector("select[name='hebergement']").addEventListener("change", calculerPrix);
-    document.querySelector("select[name='transport']").addEventListener("change", calculerPrix);
-    document.querySelectorAll("input[name='activites[]']").forEach(el => el.addEventListener("change", calculerPrix));
-
-    // Initialisation du prix
-    calculerPrix();
-});
+        // Initialisation du prix
+        calculerPrix();
+    });
