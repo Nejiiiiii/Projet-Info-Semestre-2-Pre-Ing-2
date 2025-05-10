@@ -77,7 +77,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <p>Pas encore inscrit ? <a href="inscription.php">Inscrivez-vous ici</a>.</p>
     <script src="/js/themeSwitcher.min.js"></script>
     <script src="/js/formValidation.min.js"></script>
-    <script src="/js/themeSwitcher.min.js"></script>
-    <script src="/js/formValidation.min.js"></script>
 </body>
 </html>
