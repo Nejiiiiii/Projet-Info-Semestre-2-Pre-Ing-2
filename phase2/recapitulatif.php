@@ -71,5 +71,9 @@ if (!$voyage) {
   <footer>
     <p>© 2025 High WAY. Tous droits réservés.</p>
   </footer>
+
+  $tarifs = json_decode(file_get_contents("data/tarifs.json"), true); // Charge les tarifs qui sont dans data en json
+
+  
 </body>
 </html>
