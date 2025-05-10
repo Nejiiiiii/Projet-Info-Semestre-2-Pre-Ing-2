@@ -1,6 +1,6 @@
 <?php
 session_start();
-$chemin = 'data/utilisateurs.csv';
+$chemin = __DIR__ . '/data/utilisateurs.csv';
 
 // Si l'utilisateur est déjà connecté, rediriger vers le profil
 if (isset($_SESSION['login'])) {
@@ -8,74 +8,116 @@ if (isset($_SESSION['login'])) {
     exit;
 }
 
-$error = "";
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $login = trim($_POST['login']);
-    $password = trim($_POST['password']);
-    $found = false;
+$errors = [];
 
-    if (($handle = fopen($chemin, "r")) !== false) {
-        // Récupérer l'en-tête
-        $header = fgetcsv($handle);
-        while (($data = fgetcsv($handle)) !== false) {
-            $utilisateur = array_combine($header, $data);
-            if ($utilisateur['login'] == $login) {
-                // Vérifier le mot de passe
-                if (password_verify($password, $utilisateur['motDePasse'])) {
-                    // Démarrer la session utilisateur
-                    $_SESSION['login'] = $utilisateur['login'];
-                    $_SESSION['role'] = $utilisateur['role'];
-                    $_SESSION['nom'] = $utilisateur['nom'];
-                    $_SESSION['prenom'] = $utilisateur['prenom'];
+// Si message de succès (inscription), on le récupère
+if (!empty($_SESSION['message'])) {
+    $success = $_SESSION['message'];
+    unset($_SESSION['message']);
+}
+
+// Traitement du formulaire de connexion
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $login    = trim($_POST['login']    ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    // --- Validation serveur ---
+    if ($login === '') {
+        $errors[] = 'Le login est requis.';
+    }
+    if ($password === '') {
+        $errors[] = 'Le mot de passe est requis.';
+    }
+
+    // Si pas d'erreurs, on cherche dans le CSV
+    if (empty($errors)) {
+        $found = false;
+        if (($h = fopen($chemin, 'r')) !== false) {
+            $header = fgetcsv($h);
+            while (($row = fgetcsv($h)) !== false) {
+                $util = array_combine($header, $row);
+                if ($util['login'] === $login
+                    && password_verify($password, $util['motDePasse'])
+                ) {
+                    // authentification réussie
+                    $_SESSION['login']  = $util['login'];
+                    $_SESSION['role']   = $util['role'];
+                    $_SESSION['nom']    = $util['nom'];
+                    $_SESSION['prenom'] = $util['prenom'];
                     $found = true;
                     break;
                 }
             }
-        }
-        fclose($handle);
-        if ($found) {
-            header("Location: profil.php");
-            exit;
+            fclose($h);
+            if ($found) {
+                header("Location: profil.php");
+                exit;
+            } else {
+                $errors[] = 'Identifiants incorrects.';
+            }
         } else {
-            $error = "Identifiants incorrects.";
+            $errors[] = 'Impossible d’accéder aux données utilisateurs.';
         }
-    } else {
-        $error = "Erreur lors de l'ouverture du fichier de données.";
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Connexion - Mon Agence de Voyages</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link id="theme-stylesheet" rel="stylesheet" href="/css/light.css">
-    <button id="theme-toggle" type="button">Mode sombre</button>
+  <meta charset="UTF-8">
+  <title>Connexion – Mon Agence de Voyages</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link id="theme-stylesheet" rel="stylesheet" href="/css/light.css">
 </head>
 <body>
-    <h1>Connexion</h1>
-    <?php
-    if (!empty($_SESSION['message'])) {
-        echo "<p style='color:green;'>" . $_SESSION['message'] . "</p>";
-        unset($_SESSION['message']);
-    }
-    if ($error != "") {
-        echo "<p style='color:red;'>$error</p>";
-    }
-    ?>
-    <form action="" method="post">
-        <label for="login">Login :</label><br>
-        <input type="text" id="login" name="login" required><br><br>
-        
-        <label for="password">Mot de passe :</label><br>
-        <input type="password" id="password" name="password" required><br><br>
-        
-        <button type="submit">Se connecter</button>
-    </form>
-    <p>Pas encore inscrit ? <a href="inscription.php">Inscrivez-vous ici</a>.</p>
-    <script src="/js/themeSwitcher.min.js"></script>
-    <script src="/js/formValidation.min.js"></script>
+  <h1>Connexion</h1>
+
+  <!-- Affichage message succès inscription -->
+  <?php if (!empty($success)): ?>
+    <p style="color:green;"><?= htmlspecialchars($success) ?></p>
+  <?php endif; ?>
+
+  <!-- Affichage erreurs serveur -->
+  <?php if (!empty($errors)): ?>
+    <ul class="error-list" style="color:red;">
+      <?php foreach ($errors as $err): ?>
+        <li><?= htmlspecialchars($err) ?></li>
+      <?php endforeach; ?>
+    </ul>
+  <?php endif; ?>
+
+  <form action="" method="post" class="needs-validation">
+    <div class="form-group">
+      <label for="login">Login :</label><br>
+      <input
+        type="text"
+        id="login"
+        name="login"
+        required
+        data-minlength="3"
+        maxlength="30"
+        value="<?= htmlspecialchars($_POST['login'] ?? '') ?>"
+      /><br><br>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mot de passe :</label><br>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        required
+        data-minlength="6"
+      /><br><br>
+    </div>
+
+    <button type="submit">Se connecter</button>
+  </form>
+
+  <p>Pas encore inscrit ? <a href="inscription.php">Inscrivez-vous ici</a>.</p>
+
+  <!-- Chargement du script de validation client -->
+  <script src="/public/js/form-validation.js"></script>
+  <script src="/js/themeSwitcher.min.js"></script>
 </body>
 </html>
