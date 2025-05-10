@@ -76,6 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit">S'inscrire</button>
     </form>
     <p>Déjà inscrit ? <a href="connexion.php">Connectez-vous ici</a>.</p>
+    <script src="/public/js/form-validation.js"></script>
+
 </body>
 </html>
 
