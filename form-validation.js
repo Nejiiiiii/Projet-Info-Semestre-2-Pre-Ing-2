@@ -98,22 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
 }
-// Affichage du formulaire plus bas, avec affichage de $errors
-?>
-```
 
-**Changements clés** :
 
-1. Utiliser `filter_var()` pour valider l’email.
-2. Vérifier l’existence avant insertion.
-3. Hasher le mot de passe avec `password_hash()`.
-4. Gérer les erreurs et les afficher dans le HTML.
-
----
-
-## 3. Modifications à apporter à **`login.php`**
-
-```php
 <?php
 session_start();
 require_once __DIR__ . '/../config/database.php';
@@ -139,36 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
 }
-// Affichage du formulaire et des $errors dessous
-?>
-```
 
----
-
-## 4. Changements HTML / attributs à ajouter
-
-* À vos `<form>` d’inscription et de connexion :
-
-  ```html
   <form action="register.php" method="post" class="needs-validation">
     <input type="text" name="username" required data-minlength="3" />
     <input type="email" name="email" required />
     <input type="password" name="password" required data-minlength="6" />
     <button type="submit">S’inscrire</button>
   </form>
-  ```
-
-* Charger le script en bas de page :
-
-  ```html
-  <script src="/public/js/form-validation.js"></script>
-  ```
-
----
-
-Avec ces fichiers et modifications, tu as :
-
-1. Validation UX + accessibilité côté client.
-2. Validation et sécurité côté serveur (email, mot de passe hashé, prepared statements).
-
-Dis-moi si tu veux un exemple complet d’une page d’inscription ou d’autres ajustements !
+  
