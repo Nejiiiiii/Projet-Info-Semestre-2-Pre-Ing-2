@@ -51,6 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Connexion - Mon Agence de Voyages</title>
     <link rel="stylesheet" href="css/style.css">
+    <link id="theme-stylesheet" rel="stylesheet" href="/css/light.css">
+    <button id="theme-toggle" type="button">Mode sombre</button>
 </head>
 <body>
     <h1>Connexion</h1>
@@ -73,5 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit">Se connecter</button>
     </form>
     <p>Pas encore inscrit ? <a href="inscription.php">Inscrivez-vous ici</a>.</p>
+    <script src="/js/themeSwitcher.min.js"></script>
+    <script src="/js/formValidation.min.js"></script>
+    <script src="/js/themeSwitcher.min.js"></script>
+    <script src="/js/formValidation.min.js"></script>
 </body>
 </html>
