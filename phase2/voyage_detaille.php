@@ -159,6 +159,17 @@ $avis = array_filter($commentaires, fn($c) => $c["voyage_id"] == $voyage["id"]);
     | Conçu avec 💖 pour pailleter vos vols ✈️</p>
   </footer>
 
+// Rajout pour le JS du panier
+<!-- 🛒 Formulaire caché pour ajouter un voyage au panier -->
+<form id="form-panier" action="traitement/ajouter_panier.php" method="post">
+    <input type="hidden" name="voyage_id" value="<?= $voyage["id"] ?>">
+    <input type="hidden" name="nb_personnes" value="1">
+    <input type="hidden" name="hebergement" value="standard">
+    <input type="hidden" name="transport" value="bus">
+    <input type="hidden" name="activites[]" value="">
+</form>
+
+
 <script src="js/prix_dynamique.js"></script> // Ligne rajoutée pour le js du prix dynamique pour la création du panier
 
 
