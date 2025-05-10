@@ -1,0 +1,5 @@
+{
+    "hebergement": { "standard": 0, "confort": 50, "luxe": 100 },
+    "transport": { "bus": 0, "train": 30, "avion": 100 },
+    "activites": { "Randonnée": 20, "Plongée": 50, "Visites culturelles": 30 }
+}
