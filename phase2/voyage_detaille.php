@@ -158,5 +158,8 @@ $avis = array_filter($commentaires, fn($c) => $c["voyage_id"] == $voyage["id"]);
     | Conçu avec 💖 pour pailleter vos vols ✈️</p>
   </footer>
 
+<script src="js/prix_dynamique.js"></script> // Ligne rajoutée pour le js du prix dynamique pour la création du panier
+
+
 </body>
 </html>
